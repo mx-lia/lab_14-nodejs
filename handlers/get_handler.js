@@ -1,8 +1,15 @@
 const url = require('url');
+const fs = require('fs');
 let err_handler = require('./err_handler');
 
 module.exports = (req, res, pool) => {
     switch((url.parse(req.url)).pathname) {
+        case '/': {
+            let html = fs.readFile('./index.html', (err, data) => {
+                res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'});
+                res.end(data);
+            });
+        } break;
         case '/api/faculties': {
             pool.request().query('select * from faculty', (err, result) => {
                 if(err)
